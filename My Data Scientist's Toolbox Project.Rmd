@@ -1,0 +1,27 @@
+---
+title: "My Data Scientist's Toolbox Project"
+author: "Chen"
+date: "2026-07-07"
+output: html_document
+---
+
+
+```{r}
+data(mtcars)
+head(mtcars)
+
+summary(mtcars$mpg)
+```
+
+### Here is a simple plot
+
+```{r, echo=TRUE}
+plot(mtcars$hp, mtcars$mpg, 
+     main = "Horsepower vs MPG",
+     xlab = "Horsepower", 
+     ylab = "Miles Per Gallon",
+     col = "blue")
+```
+```
+
+
