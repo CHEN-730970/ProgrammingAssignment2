@@ -1,0 +1,28 @@
+---
+title: "Untitled"
+author: "Yulun Chen"
+date: "2026-07-08"
+output: html_document
+---
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+
+
+train_x <- read.table("C:/Users/斯图加特/Desktop/X_train.txt")
+test_x  <- read.table("C:/Users/斯图加特/Desktop/body_acc_x_test.txt")
+
+
+if (ncol(train_x) != ncol(test_x)) {
+  stop(sprintf("列数不同：train %d 列，test %d 列，无法合并", ncol(train_x), ncol(test_x)))
+}
+
+
+X <- rbind(train_x, test_x)
+```
+
+
+
+
