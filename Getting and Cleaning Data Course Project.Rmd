@@ -1,26 +1,70 @@
 ---
 title: "Untitled"
 author: "Yulun Chen"
-date: "2026-07-08"
+date: "2026-07-015"
 output: html_document
 ---
 
 ```{r}
 
+```{r}
+trainX <- read.table("./UCI HAR Dataset/train/X_train.txt")
+trainY <- read.table("./UCI HAR Dataset/train/y_train.txt")
+train_subject <- read.table("./UCI HAR Dataset/train/subject_train.txt")
+
+
+
+testX <- read.table("./UCI HAR Dataset/test/X_test.txt")
+testY <- read.table("./UCI HAR Dataset/test/y_test.txt")
+test_subject <- read.table("./UCI HAR Dataset/test/subject_test.txt")
+
+
+data_X= rbind(trainX,testX)
+data_Y=rbind(trainY,testY)
+data_subject=rbind(train_subject,test_subject)
+
+
+
+features <- read.table("./UCI HAR Dataset/features.txt")
+
+
+
+activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt")
+colnames(activity_labels) <- c("ActivityID", "ActivityType")
+
+
+colnames(data_X) <- features[, 2]
+colnames(data_Y) <- "ActivityID"
+colnames(data_subject) <- "SubjectID"
+
+
+Mean_Std <- grepl("mean\\(\\)|std\\(\\)", colnames(data_X))
+Main_data_X=data_X[,Mean_Std]
+
+# Here is the clean data
+
+Clean_data=cbind(data_subject,data_Y,Main_data_X)
+
+
+
+Clean_Data=merge(activity_labels,Clean_data, by="ActivityID", all.x=TRUE)
+
+
+
+colnames(Clean_Data) <- gsub("Mag", "Magnitude", colnames(Clean_Data))
+colnames(Clean_Data) <- gsub("BodyBody", "Body", colnames(Clean_Data))
+colnames(Clean_Data) <- gsub("^t", "time", colnames(Clean_Data))
+colnames(Clean_Data) <- gsub("^f", "frequency", colnames(Clean_Data))
+colnames(Clean_Data) <- gsub("Acc", "Accelerometer", colnames(Clean_Data))
+colnames(Clean_Data) <- gsub("Gyro", "Gyroscope", colnames(Clean_Data))
+
 library(dplyr)
-library(tidyr)
+Final_Set <- Clean_Data %>%
+  group_by(SubjectID, ActivityID, ActivityType) %>%
+  summarise_all(mean)
 
-
-train_x <- read.table("C:/Users/斯图加特/Desktop/X_train.txt")
-test_x  <- read.table("C:/Users/斯图加特/Desktop/body_acc_x_test.txt")
-
-
-if (ncol(train_x) != ncol(test_x)) {
-  stop(sprintf("列数不同：train %d 列，test %d 列，无法合并", ncol(train_x), ncol(test_x)))
-}
-
-
-X <- rbind(train_x, test_x)
+library(tidyverse)
+write_tsv(Final_Set, "Final_Set.txt")
 ```
 
 
