@@ -1,0 +1,103 @@
+---
+title: "Course Project 1"
+author: "Yulun Chen"
+date: "2026-07-16"
+output: html_document
+---
+
+```{r}
+# 读取数据
+data <- read.table("C:/Users/斯图加特/Desktop/household_power_consumption.txt", 
+                   header = TRUE, sep = ";", na.strings = "?", 
+                   colClasses = c("character", "character", rep("numeric", 7)))
+
+# 转换日期并筛选 2007-02-01 和 2007-02-02
+data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
+subdata <- subset(data, Date >= "2007-02-01" & Date <= "2007-02-02")
+
+# 保存图片到桌面（宽高 480）
+png("C:/Users/斯图加特/Desktop/Course Project 1 PNG1.png", width = 480, height = 480)
+hist(subdata$Global_active_power, col = "red", main = "Global Active Power", 
+     xlab = "Global Active Power (kilowatts)", ylab = "Frequency")
+dev.off()
+```
+
+```{r}
+# 读取数据
+data <- read.table("C:/Users/斯图加特/Desktop/household_power_consumption.txt", 
+                   header = TRUE, sep = ";", na.strings = "?", 
+                   colClasses = c("character", "character", rep("numeric", 7)))
+
+data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
+subdata <- subset(data, Date >= "2007-02-01" & Date <= "2007-02-02")
+
+# 合并日期与时间
+datetime <- paste(subdata$Date, subdata$Time)
+subdata$DateTime <- strptime(datetime, format = "%Y-%m-%d %H:%M:%S")
+
+# 保存图片到桌面
+png("C:/Users/斯图加特/Desktop/Course Project 1 PNG2.png", width = 480, height = 480)
+plot(subdata$DateTime, subdata$Global_active_power, type = "l", 
+     xlab = "", ylab = "Global Active Power (kilowatts)")
+dev.off()
+```
+
+```{r}
+# 读取数据
+data <- read.table("C:/Users/斯图加特/Desktop/household_power_consumption.txt", 
+                   header = TRUE, sep = ";", na.strings = "?", 
+                   colClasses = c("character", "character", rep("numeric", 7)))
+
+data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
+subdata <- subset(data, Date >= "2007-02-01" & Date <= "2007-02-02")
+
+datetime <- paste(subdata$Date, subdata$Time)
+subdata$DateTime <- strptime(datetime, format = "%Y-%m-%d %H:%M:%S")
+
+# 保存图片到桌面
+png("C:/Users/斯图加特/Desktop/Course Project 1 PNG3.png", width = 480, height = 480)
+plot(subdata$DateTime, subdata$Sub_metering_1, type = "l", 
+     xlab = "", ylab = "Energy sub metering")
+lines(subdata$DateTime, subdata$Sub_metering_2, col = "red")
+lines(subdata$DateTime, subdata$Sub_metering_3, col = "blue")
+legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"),
+       col = c("black", "red", "blue"), lty = 1)
+dev.off()
+```
+
+```{r}
+# 读取数据
+data <- read.table("C:/Users/斯图加特/Desktop/household_power_consumption.txt", 
+                   header = TRUE, sep = ";", na.strings = "?", 
+                   colClasses = c("character", "character", rep("numeric", 7)))
+
+data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
+subdata <- subset(data, Date >= "2007-02-01" & Date <= "2007-02-02")
+
+datetime <- paste(subdata$Date, subdata$Time)
+subdata$DateTime <- strptime(datetime, format = "%Y-%m-%d %H:%M:%S")
+
+# 保存图片到桌面
+png("C:/Users/斯图加特/Desktop/Course Project 1 PNG4.png", width = 480, height = 480)
+par(mfrow = c(2, 2))
+
+# 左上
+plot(subdata$DateTime, subdata$Global_active_power, type = "l", 
+     xlab = "", ylab = "Global Active Power")
+# 右上
+plot(subdata$DateTime, subdata$Voltage, type = "l", 
+     xlab = "datetime", ylab = "Voltage")
+# 左下
+plot(subdata$DateTime, subdata$Sub_metering_1, type = "l", 
+     xlab = "", ylab = "Energy sub metering")
+lines(subdata$DateTime, subdata$Sub_metering_2, col = "red")
+lines(subdata$DateTime, subdata$Sub_metering_3, col = "blue")
+legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"),
+       col = c("black", "red", "blue"), lty = 1, bty = "n")
+# 右下
+plot(subdata$DateTime, subdata$Global_reactive_power, type = "l", 
+     xlab = "datetime", ylab = "Global_reactive_power")
+
+dev.off()
+```
+
